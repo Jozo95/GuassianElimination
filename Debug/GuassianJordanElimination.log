@@ -1,0 +1,3 @@
+﻿  Guassian.cpp
+Debug\Guassian.obj : warning LNK4042: object specified more than once; extras ignored
+  GuassianJordanElimination.vcxproj -> C:\Users\jozef\onedrive\dokument\visual studio 2015\Projects\GuassianJordanElimination\Debug\GuassianJordanElimination.exe
