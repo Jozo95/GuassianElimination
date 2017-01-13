@@ -13,9 +13,10 @@ public:
 
 	bool calculateMatrix();
 private:
+
 	double *matrix2;
 	double **matrixCpy;
-	int totalSize;
+	int totalSizeRow, totalSizeColumn;
 	bool readFile(std::string filename);
 	
 };
