@@ -57,17 +57,18 @@ bool Guassian::calculateMatrix(){
 	std::cout << "Starting Pivoting index: " << startingPivotingIndex << std::endl;
 	std::cout << "After pivot" << std::endl;
 	
-	
+	int itr = 0;
 	for (int i = 0; i < totalSizeRow; i++)                    //Pivotisation
 		for (int k = i + 1;  k < totalSizeRow; k++)
-			if (matrix[i][startingPivotingIndex] < matrix[k][startingPivotingIndex])
-				for (int j = 0; j <= totalSizeColumn; j++)
-				{
+			if (matrix[i][i] < matrix[k][startingPivotingIndex + itr]) {
+				for (int j = 0; j <= totalSizeColumn; j++){
 					double temp = matrix[i][j];
 					matrix[i][j] = matrix[k][j];
 					matrix[k][j] = temp;
+					itr++;
 				}
-
+				itr = 0;
+			}
 	printMatrix();
 
 
