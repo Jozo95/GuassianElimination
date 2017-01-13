@@ -4,10 +4,11 @@
 
 
 int main(int argc, char** argv) {
-	Guassian guassian;
-	guassian = Guassian("test.txt");
+	Guassian guassian = Guassian("test.txt");
 
+	guassian.calculateMatrix();
 
+	guassian.testTheValues();
 	while (1) {
 
 	}

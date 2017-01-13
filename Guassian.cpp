@@ -8,23 +8,103 @@ Guassian::Guassian(std::string filename){
 	if (readFile(filename)) {
 		printMatrix();
 	}
+	matrix2 = new double[totalSize];
 }
 
 std::string Guassian::printMatrix()
 {
 	std::stringstream matrixPrint;
+	matrixPrint.setf(4);
 	matrixPrint << "-" << std::endl;
 	for (int i = 0; i < totalSize; i++) {
 		matrixPrint <<  "|";
-		for (int q = 0; q < totalSize-1; q++) {
+		for (int q = 0; q < totalSize; q++) {
 			matrixPrint << " " << matrix[i][q] << ", ";
 		}
-		matrixPrint << " | " <<  matrix[i][totalSize-1] << " |" << std::endl;
+		matrixPrint << " | " <<  matrix[i][totalSize] << " |" << std::endl;
 	}
-	
+	std::cout.setf(std::ios::fixed);
+	std::cout.setf(std::ios::showpoint);
+	std::cout.precision(4);
 
 	std::cout << matrixPrint.str() << std::endl;
 	return matrixPrint.str();
+}
+
+void Guassian::testTheValues(){
+	
+	std::cout << "Row looks like; " << std::endl;
+	double theSolution = 0,theSolWithCalc=0;
+	printMatrix();
+	for (int i = 0; i < totalSize; i++) {
+		theSolution = matrixCpy[i][totalSize];
+		std::cout << "The solution we need; " << theSolution << std::endl;
+		for (int k = 0; k < totalSize; k++) {
+			theSolWithCalc += matrixCpy[i][k] * matrix2[k];
+		}
+		std::cout << "The solution we got: " << theSolWithCalc << std::endl;
+		theSolWithCalc = 0;
+	}
+
+}
+
+bool Guassian::calculateMatrix(){
+	int multiplier = -1;
+	std::cout << "After pivot" << std::endl;
+	for (int i = 0; i<totalSize; i++)                    //Pivotisation
+		for (int k = i + 1; k<totalSize; k++)
+			if (matrix[i][i]<matrix[k][i])
+				for (int j = 0; j <= totalSize; j++)
+				{
+					double temp = matrix[i][j];
+					matrix[i][j] = matrix[k][j];
+					matrix[k][j] = temp;
+				}
+
+
+	printMatrix();
+	std::cout << "After guass" << std::endl;
+	for (int i = 0; i<totalSize - 1; i++)            //g.elim
+		for (int k = i + 1; k<totalSize; k++){
+			double t = matrix[k][i] / matrix[i][i];
+			double q = matrix[k][i], p = matrix[i][i];
+			for (int j = 0; j <= totalSize; j++) {
+				std::cout << "Operation (i= " << i << ") : matrix[k,j] ( " << matrix[k][j] << ") = " << matrix[k][j] << " - (" << q << " / " <<  p << ") that we get from pos (" << k << "," << i
+					<< ") and (" << i << "," << i << ") * " << matrix[i][j] << " that we get at pos (" << i << ", " << j << ")" << std::endl;
+				matrix[k][j] = matrix[k][j] - t*matrix[i][j];    
+				
+			}
+		}
+
+	printMatrix();
+
+	//std::cout << "After back-sub" << std::endl;
+	//for (int i = totalSize - 1; i >= 0; i--) {
+	//	matrix[i][totalSize] = matrix[i][totalSize] / matrix[i][i];
+	//	matrix[i][i] = matrix[i][i] / matrix[i][i];
+	//	
+	//}
+
+	
+	for (int i = 0; i < totalSize; i++) {
+		matrix2[i] = matrix[i][totalSize];
+	}
+
+	for (int i = totalSize - 1;  i >= 0; i--){                        //x is an array whose values correspond to the values of x,y,z..
+		matrix2[i] = matrix[i][totalSize];                //lhs
+		for (int j = 0; j<totalSize; j++)
+			if (j != i)            //sub lhs values except the coefficient of the variable whose value    is being calculated
+				matrix2[i] = matrix2[i] - matrix[i][j] * matrix2[j];
+		matrix2[i] = matrix2[i] / matrix[i][i];            //now finally divide the rhs by the coefficient of the variable to be calculated
+	}
+
+ 	printMatrix();
+
+	std::cout << "PRINTING SOLUTIONS" << std::endl;
+
+	for (int i = 0; i < totalSize; i++)
+		std::cout << matrix2[i] << ", ";
+	return false;
 }
 
 bool Guassian::readFile(std::string filename)
@@ -36,16 +116,20 @@ bool Guassian::readFile(std::string filename)
 		file >> totalSize;
 		std::cout << "N value; " << totalSize << std::endl;
 		this->matrix = new double*[totalSize];
+		this->matrixCpy = new double*[totalSize];
 		int q = 0,i  = 0,b = 0;
-		for (i; i < totalSize; i++)
+		for (i; i < totalSize + 1; i++) {
 			this->matrix[i] = new double[totalSize];
+			this->matrixCpy[i] = new double[totalSize];
+		}
 		std::cout << "Matrix ** added with n*n->; " << totalSize << ". Starting to read values..." << std::endl;
 		i = 0;
 
 		while (!file.eof()) {
-			while (q < totalSize) {
+			while (q < totalSize+1) {
 				file >> this->matrix[i][b++];
-				std::cout << "Value read: " << matrix[i][b] << std::endl; 
+				matrixCpy[i][b-1] = matrix[i][b - 1];
+				//std::cout << "Value read: " << matrix[i][b] << std::endl; 
 				q++;
 			}
 			b = 0;
