@@ -75,8 +75,9 @@ void Guassian::solveToZeros(int startingRow) {
 
 }
 
+
+
 bool Guassian::calculateMatrix(){
-	//int calcOrNot = -1;
 	int tempk = 0;
 	std::cout << "After pivot" << std::endl;
 	for (int i = 0; i < totalSize; i++) {
@@ -93,24 +94,14 @@ bool Guassian::calculateMatrix(){
 			matrix[i][j] = matrix[tempk][j];
 			matrix[tempk][j] = temp;
 		}
-
 		//Modifying matrix w.r.t. pivot
 		solveToZeros(i);
 	}
-
-	//printMatrix();
-	std::cout << "After guass" << std::endl;
-
-//	printMatrix();
-
-	//std::cout << "After back-sub" << std::endl;
-	//for (int i = totalSize - 1; i >= 0; i--) {
-	//	matrix[i][totalSize] = matrix[i][totalSize] / matrix[i][i];
-	//	matrix[i][i] = matrix[i][i] / matrix[i][i];
-	//	
-	//}
-
 	
+	//Solve from bottom to upper.
+
+
+
  	printMatrix();
 	
 	std::cout << "PRINTING SOLUTIONS" << std::endl;
