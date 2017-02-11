@@ -49,6 +49,11 @@ void Guassian::testTheValues(){
 }
 
 void Guassian::solveToZeros(int startingRow) {
+	if (startingRow == -1){
+		startingRow = totalSize - 1;
+	}
+
+
 	for (int i = startingRow; i<totalSize - 1; i++)            //g.elim
 		for (int k = i + 1; k<totalSize; k++) {
 			double t = matrix[k][i] / matrix[i][i];
@@ -73,6 +78,30 @@ void Guassian::solveToZeros(int startingRow) {
 		matrix2[i] = matrix2[i] / matrix[i][i];            //now finally divide the rhs by the coefficient of the variable to be calculated
 	}
 
+}
+
+void Guassian::solveToZerosFromBottom(int startingRow) {
+	for (int i = totalSize-1; i>=0; i--)            //g.elim
+		for (int k = i - 1; k >= 0; k--) {
+			double t = matrix[k][i] / matrix[i][i];
+			double q = matrix[k][i], p = matrix[i][i];
+			for (int j = 0; j <= totalSize; j++) {
+				//std::cout << "Operation (i= " << i << ") : matrix[k,j] ( " << matrix[k][j] << ") = " << matrix[k][j] << " - (" << q << " / " << p << ") that we get from pos (" << k << "," << i
+				//<< ") and (" << i << "," << i << ") * " << matrix[i][j] << " that we get at pos (" << i << ", " << j << ")" << std::endl;
+				matrix[k][j] = matrix[k][j] - t*matrix[i][j];
+
+			}
+		}
+	for (int i = 0; i < totalSize; i++) {
+		matrix2[i] = matrix[i][totalSize];
+	}
+	for (int i = totalSize - 1; i >= 0; i--) {                        //x is an array whose values correspond to the values of x,y,z..
+		matrix2[i] = matrix[i][totalSize];                //lhs
+		for (int j = totalSize-1; j >= 0 ; j--)
+			if (j != i)            //sub lhs values except the coefficient of the variable whose value    is being calculated
+				matrix2[i] = matrix2[i] - matrix[i][j] * matrix2[j];
+		matrix2[i] = matrix2[i] / matrix[i][i];            //now finally divide the rhs by the coefficient of the variable to be calculated
+	}
 }
 
 
@@ -101,7 +130,7 @@ bool Guassian::calculateMatrix(){
 	//Solve from bottom to upper.
 
 
-
+	solveToZerosFromBottom(0);
  	printMatrix();
 	
 	std::cout << "PRINTING SOLUTIONS" << std::endl;

@@ -13,6 +13,8 @@ public:
 
 	void solveToZeros(int startingRow);
 
+	void solveToZerosFromBottom(int startingRow);
+
 	bool calculateMatrix();
 private:
 	double *matrix2;
