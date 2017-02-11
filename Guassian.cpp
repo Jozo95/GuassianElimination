@@ -8,22 +8,20 @@ Guassian::Guassian(std::string filename){
 	if (readFile(filename)) {
 		printMatrix();
 	}
-	matrix2 = new double[totalSizeRow];
+	matrix2 = new double[totalSize];
 }
 
 std::string Guassian::printMatrix()
 {
 	std::stringstream matrixPrint;
 	matrixPrint.setf(4);
-
-
 	matrixPrint << "-" << std::endl;
-	for (int i = 0; i < totalSizeRow; i++) {
+	for (int i = 0; i < totalSize; i++) {
 		matrixPrint <<  "|";
-		for (int q = 0; q < totalSizeColumn; q++) {
+		for (int q = 0; q < totalSize; q++) {
 			matrixPrint << " " << matrix[i][q] << ", ";
 		}
-		matrixPrint << " | " <<  matrix[i][totalSizeColumn] << " |" << std::endl;
+		matrixPrint << " | " <<  matrix[i][totalSize] << " |" << std::endl;
 	}
 	std::cout.setf(std::ios::fixed);
 	std::cout.setf(std::ios::showpoint);
@@ -38,10 +36,10 @@ void Guassian::testTheValues(){
 	std::cout << "Row looks like; " << std::endl;
 	double theSolution = 0,theSolWithCalc=0;
 	printMatrix();
-	for (int i = 0; i < totalSizeRow; i++) {
-		theSolution = matrixCpy[i][totalSizeColumn];
+	for (int i = 0; i < totalSize; i++) {
+		theSolution = matrixCpy[i][totalSize];
 		std::cout << "The solution we need; " << theSolution << std::endl;
-		for (int k = 0; k < totalSizeColumn; k++) {
+		for (int k = 0; k < totalSize; k++) {
 			theSolWithCalc += matrixCpy[i][k] * matrix2[k];
 		}
 		std::cout << "The solution we got: " << theSolWithCalc << std::endl;
@@ -50,83 +48,24 @@ void Guassian::testTheValues(){
 
 }
 
-bool Guassian::calculateMatrix(){
-	int multiplier = -1;
-	
-	int startingPivotingIndex = totalSizeColumn - totalSizeRow;
-	std::cout << "Starting Pivoting index: " << startingPivotingIndex << std::endl;
-	std::cout << "After pivot" << std::endl;
-	
-	int itr = 0;
-	for (int i = 0; i < totalSizeRow; i++)                    //Pivotisation
-		for (int k = i + 1;  k < totalSizeRow; k++)
-			if (matrix[i][i] < matrix[k][startingPivotingIndex + itr]) {
-				for (int j = 0; j <= totalSizeColumn; j++){
-					double temp = matrix[i][j];
-					matrix[i][j] = matrix[k][j];
-					matrix[k][j] = temp;
-					itr++;
-				}
-				itr = 0;
-			}
-	printMatrix();
-
-
-	/*
-		int startingPivotingIndex = totalSizeColumn - totalSizeRow;
-	std::cout << "Starting Pivoting index: " << startingPivotingIndex << std::endl;
-	
-
-	std::cout << "After pivot" << std::endl;
-	
-	int i, k, j, itrtor=1;
-	for (i = 0; i < totalSizeRow-1; i++) {
-		for (k = startingPivotingIndex; k < totalSizeColumn; k++) {
-			if (matrix[i][i] < matrix[i + itrtor][k]) {
-				for (int j = 0; j <= totalSizeColumn; j++) {
-					double temp = matrix[i][j];
-					matrix[i][j] = matrix[i + 1][j];
-					matrix[i + 1][j] = temp;
-					itrtor++;
-				}
-				itrtor = 0;
-			}
-			
-		}
-	}
-	*/
-    // TESTING WITH 1 - BITS, N - R PIVOTING
-	
-
-
-	/*std::cout << "After guass" << std::endl;
-	for (int i = 0; i<totalSize - 1; i++)            //g.elim
-		for (int k = i + 1; k<totalSize; k++){
+void Guassian::solveToZeros(int startingRow) {
+	for (int i = startingRow; i<totalSize - 1; i++)            //g.elim
+		for (int k = i + 1; k<totalSize; k++) {
 			double t = matrix[k][i] / matrix[i][i];
 			double q = matrix[k][i], p = matrix[i][i];
 			for (int j = 0; j <= totalSize; j++) {
-				std::cout << "Operation (i= " << i << ") : matrix[k,j] ( " << matrix[k][j] << ") = " << matrix[k][j] << " - (" << q << " / " <<  p << ") that we get from pos (" << k << "," << i
-					<< ") and (" << i << "," << i << ") * " << matrix[i][j] << " that we get at pos (" << i << ", " << j << ")" << std::endl;
-				matrix[k][j] = matrix[k][j] - t*matrix[i][j];    
-				
+				//std::cout << "Operation (i= " << i << ") : matrix[k,j] ( " << matrix[k][j] << ") = " << matrix[k][j] << " - (" << q << " / " << p << ") that we get from pos (" << k << "," << i
+					//<< ") and (" << i << "," << i << ") * " << matrix[i][j] << " that we get at pos (" << i << ", " << j << ")" << std::endl;
+				matrix[k][j] = matrix[k][j] - t*matrix[i][j];
+
 			}
 		}
 
-	printMatrix();
-
-	//std::cout << "After back-sub" << std::endl;
-	//for (int i = totalSize - 1; i >= 0; i--) {
-	//	matrix[i][totalSize] = matrix[i][totalSize] / matrix[i][i];
-	//	matrix[i][i] = matrix[i][i] / matrix[i][i];
-	//	
-	//}
-	
-	
 	for (int i = 0; i < totalSize; i++) {
 		matrix2[i] = matrix[i][totalSize];
 	}
 
-	for (int i = totalSize - 1;  i >= 0; i--){                        //x is an array whose values correspond to the values of x,y,z..
+	for (int i = totalSize - 1; i >= 0; i--) {                        //x is an array whose values correspond to the values of x,y,z..
 		matrix2[i] = matrix[i][totalSize];                //lhs
 		for (int j = 0; j<totalSize; j++)
 			if (j != i)            //sub lhs values except the coefficient of the variable whose value    is being calculated
@@ -134,44 +73,76 @@ bool Guassian::calculateMatrix(){
 		matrix2[i] = matrix2[i] / matrix[i][i];            //now finally divide the rhs by the coefficient of the variable to be calculated
 	}
 
- 	printMatrix();
+}
 
+bool Guassian::calculateMatrix(){
+	//int calcOrNot = -1;
+	int tempk = 0;
+	std::cout << "After pivot" << std::endl;
+	for (int i = 0; i < totalSize; i++) {
+		//Pivotisation
+		tempk = i;
+		// Finding the maximum head (pivot selection)
+		for (int k = i + 1; k < totalSize; k++)
+			if (matrix[i][i] < matrix[k][i])
+				tempk = k;
+		//Switch row
+		for (int j = 0; j <= totalSize; j++)
+		{
+			double temp = matrix[i][j];
+			matrix[i][j] = matrix[tempk][j];
+			matrix[tempk][j] = temp;
+		}
+
+		//Modifying matrix w.r.t. pivot
+		solveToZeros(i);
+	}
+
+	//printMatrix();
+	std::cout << "After guass" << std::endl;
+
+//	printMatrix();
+
+	//std::cout << "After back-sub" << std::endl;
+	//for (int i = totalSize - 1; i >= 0; i--) {
+	//	matrix[i][totalSize] = matrix[i][totalSize] / matrix[i][i];
+	//	matrix[i][i] = matrix[i][i] / matrix[i][i];
+	//	
+	//}
+
+	
+ 	printMatrix();
+	
 	std::cout << "PRINTING SOLUTIONS" << std::endl;
 
 	for (int i = 0; i < totalSize; i++)
-		std::cout << matrix2[i] << ", ";*/
+		std::cout << matrix2[i] << ", ";
 	return false;
 }
 
 bool Guassian::readFile(std::string filename)
 {
-
 	std::ifstream file;
 	file.open(filename);
 	if (file.is_open()) {
 		std::cout << "File open, continueing" << std::endl;
-		file >> totalSizeRow;
-		file >> totalSizeColumn;
-		std::cout << "N value; " << totalSizeRow << std::endl;
-
-		std::cout << "N value; " << totalSizeColumn << std::endl;
-
-
-		this->matrix = new double*[totalSizeRow];
-		this->matrixCpy = new double*[totalSizeRow];
+		file >> totalSize;
+		std::cout << "N value; " << totalSize << std::endl;
+		this->matrix = new double*[totalSize];
+		this->matrixCpy = new double*[totalSize];
 		int q = 0,i  = 0,b = 0;
-		for (i; i < totalSizeRow + 1; i++) {
-			this->matrix[i] = new double[totalSizeColumn];
-			this->matrixCpy[i] = new double[totalSizeColumn];
+		for (i; i < totalSize + 1; i++) {
+			this->matrix[i] = new double[totalSize];
+			this->matrixCpy[i] = new double[totalSize];
 		}
-		std::cout << "Matrix ** added with r*n->; " << totalSizeRow << "; " << totalSizeColumn << ".Starting to read values..." << std::endl;
+		std::cout << "Matrix ** added with n*n->; " << totalSize << ". Starting to read values..." << std::endl;
 		i = 0;
 
 		while (!file.eof()) {
-			while (q < totalSizeColumn+1) {
+			while (q < totalSize+1) {
 				file >> this->matrix[i][b++];
 				matrixCpy[i][b-1] = matrix[i][b - 1];
-				//std::cout << "Value read: " << matrix[i][b-1] << std::endl; 
+				//std::cout << "Value read: " << matrix[i][b] << std::endl; 
 				q++;
 			}
 			b = 0;

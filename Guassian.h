@@ -11,12 +11,13 @@ public:
 	std::string printMatrix();
 	void testTheValues();
 
+	void solveToZeros(int startingRow);
+
 	bool calculateMatrix();
 private:
-
 	double *matrix2;
 	double **matrixCpy;
-	int totalSizeRow, totalSizeColumn;
+	int totalSize;
 	bool readFile(std::string filename);
 	
 };
