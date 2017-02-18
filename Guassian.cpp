@@ -108,6 +108,19 @@ void Guassian::solveToZerosFromBottom(int startingRow) {
 }
 
 
+void Guassian::findAllCombinations() {
+
+	int n = totalSizeColumn - 1, w = 2, maxIter = 0;
+	maxIter = factorial(n) / (factorial(n-w)*factorial(w));
+	std::cout << "maxIter: " << maxIter << std::endl;
+
+}
+
+int Guassian::factorial(int n)
+{
+	return (n == 1 || n == 0) ? 1 : factorial(n - 1) * n;
+}
+
 
 bool Guassian::calculateMatrix(){
 	int tempk = 0;
@@ -135,7 +148,7 @@ bool Guassian::calculateMatrix(){
 
 	solveToZerosFromBottom(0);
  	printMatrix();
-	
+	findAllCombinations();
 	std::cout << "PRINTING SOLUTIONS" << std::endl;
 
 	for (int i = 0; i < totalSizeRow; i++)

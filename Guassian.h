@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
-
+#include <cmath>
 class Guassian {
 public:
 	Guassian();
@@ -14,6 +14,10 @@ public:
 	void solveToZeros(int startingRow);
 
 	void solveToZerosFromBottom(int startingRow);
+
+	void findAllCombinations();
+
+	int factorial(int n);
 
 	bool calculateMatrix();
 private:
