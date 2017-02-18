@@ -63,8 +63,8 @@ void Guassian::solveToZeros(int startingRow) {
 				//std::cout << "Operation (i= " << i << ") : matrix[k,j] ( " << matrix[k][j] << ") = " << matrix[k][j] << " - (" << q << " / " << p << ") that we get from pos (" << k << "," << i
 					//<< ") and (" << i << "," << i << ") * " << matrix[i][j] << " that we get at pos (" << i << ", " << j << ")" << std::endl;
 				matrix[k][j] = matrix[k][j] - t*matrix[i][j];
-				//if (matrix[k][j] == 2)
-					//matrix[k][j] = 0;
+				if (matrix[k][j] < 0 || matrix[k][j] > 1)
+					matrix[k][j] = 0;
 			}
 		}
 
@@ -91,7 +91,8 @@ void Guassian::solveToZerosFromBottom(int startingRow) {
 				//std::cout << "Operation (i= " << i << ") : matrix[k,j] ( " << matrix[k][j] << ") = " << matrix[k][j] << " - (" << q << " / " << p << ") that we get from pos (" << k << "," << i
 				//<< ") and (" << i << "," << i << ") * " << matrix[i][j] << " that we get at pos (" << i << ", " << j << ")" << std::endl;
 				matrix[k][j] = matrix[k][j] - t*matrix[i][j];
-
+				if (matrix[k][j] < 0 || matrix[k][j] > 1 )
+					matrix[k][j] = 0;
 			}
 		}
 	for (int i = 0; i < totalSizeRow; i++) {
