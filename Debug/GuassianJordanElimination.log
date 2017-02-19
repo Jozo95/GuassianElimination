@@ -1,3 +1,5 @@
 ﻿  Guassian.cpp
+c:\users\jozef\onedrive\dokument\visual studio 2015\projects\guassianjordanelimination\guassianjordanelimination\guassian.cpp(130): warning C4101: 'indexOfFirst': unreferenced local variable
+c:\users\jozef\onedrive\dokument\visual studio 2015\projects\guassianjordanelimination\guassianjordanelimination\guassian.cpp(130): warning C4101: 'indexOfSecond': unreferenced local variable
 Debug\Guassian.obj : warning LNK4042: object specified more than once; extras ignored
   GuassianJordanElimination.vcxproj -> C:\Users\jozef\onedrive\dokument\visual studio 2015\Projects\GuassianJordanElimination\Debug\GuassianJordanElimination.exe

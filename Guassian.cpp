@@ -113,7 +113,45 @@ void Guassian::findAllCombinations() {
 	int n = totalSizeColumn - 1, w = 2, maxIter = 0;
 	maxIter = factorial(n) / (factorial(n-w)*factorial(w));
 	std::cout << "maxIter: " << maxIter << std::endl;
+	int *valuesOfColumns = new int[totalSizeColumn];
+	
+	for (int i = 0; i < totalSizeColumn; i++) {
+		valuesOfColumns[i] = 0;
+		for (int k = 0; k < totalSizeRow; k++) {
+			if (matrix[k][i] == 1) {
+				valuesOfColumns[i]++;
+			}
+		}
+	}
 
+	for (int i = 0; i < totalSizeColumn; i++) {
+		std::cout << "Column " << i << " has the value: " << valuesOfColumns[i] << std::endl;
+	}
+	int indexOfFirst, indexOfSecond;
+
+	int **combinationMatrix = new int*[maxIter];
+	for (int i = 0; i < maxIter;  i++) {
+		combinationMatrix[i] = new int[maxIter];
+		for (int k = 0; k < maxIter; k++)
+			combinationMatrix[i][k] = -1;
+	}
+		
+	for (int i = 0; i < maxIter; i++) {
+		for (int k = i+1; k < maxIter; k++) {
+			combinationMatrix[i][k] = k;
+		}
+	}
+
+	for (int i = 0; i < totalSizeColumn; i++) {
+		std::cout << "Index " << i << " can be combined with these indexes: " << std::endl;
+		for (int k = i + 1; k < totalSizeColumn; k++) {
+			std::cout << combinationMatrix[i][k] <<  ", ";
+		}
+		std::cout <<  std::endl;
+	}
+
+
+	std::cout << "ENDEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD------------------------------0" << std::endl;
 }
 
 int Guassian::factorial(int n)

@@ -21,6 +21,7 @@ public:
 
 	bool calculateMatrix();
 private:
+
 	double *matrix2;
 	double **matrixCpy;
 	int totalSizeRow,totalSizeColumn;
